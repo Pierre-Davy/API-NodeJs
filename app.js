@@ -11,7 +11,7 @@ app.use(favicon(__dirname + "/favicon.ico")).use(bodyParser.json());
 sequelize.initDb();
 
 app.get("/", (req, res) => {
-  res.json("Hello Heroku");
+  res.json("Hello Pikachu");
 });
 
 //ici futur points de terminaison
@@ -29,8 +29,8 @@ app.use(({ res }) => {
   res.status(404).json({ message });
 });
 
-app.listen(port, () =>
+app.listen(port, process.env.IP, function () {
   console.log(
     `Notre application Node est démarrée sur : http://localhost:${port}`
-  )
-);
+  );
+});

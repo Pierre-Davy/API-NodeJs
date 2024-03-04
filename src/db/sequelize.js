@@ -4,7 +4,19 @@ const UserModel = require("../models/user");
 const pokemons = require("./mock-pokemon");
 const bcrypt = require("bcrypt");
 
-const sequelize = new Sequelize("pokedex", "root", "", {
+let sequelize;
+
+// if (process.env.NODE_ENV === "production") {
+//   sequelize = new Sequelize("pierre-davy_pokedex", "350330", "dvgvbrgq@254", {
+//     host: "mysql-pierre-davy.alwaysdata.net",
+//     dialect: "mariadb",
+//     dialectOptions: {
+//       timezone: "Etc/GMT-2",
+//     },
+//     logging: true,
+//   });
+// } else {
+sequelize = new Sequelize("pokedex", "root", "", {
   host: "127.0.0.1",
   dialect: "mariadb",
   dialectOptions: {
@@ -12,11 +24,13 @@ const sequelize = new Sequelize("pokedex", "root", "", {
   },
   logging: true,
 });
+// }
 
 const Pokemon = PokemonModel(sequelize, DataTypes);
 const User = UserModel(sequelize, DataTypes);
 
 const initDb = () => {
+  // paramete sync({ force: true }) pour reinitialiser la bdd à chaque demarrage
   return sequelize.sync({ force: true }).then((_) => {
     pokemons.map((pokemon) => {
       Pokemon.create({
